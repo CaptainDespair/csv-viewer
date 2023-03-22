@@ -12,10 +12,10 @@
         <input type ="submit" value="Загрузить"> 
     </form>
     <p style="color:rgba(0, 156, 39, 0.716)">Успешно загружено</p>
-    {% for file in files %}     
-        <br>{{ file.filename }} 
-        <form method = "GET" action="show/{{ datasets.id }}">
-            <input type="submit" value="Показать датасет" id = "id"/>
+    {% for dataset in datasets %}     
+        <br>{{ dataset.name }} 
+        <form method = "GET" action="show/{{ dataset.id }}">
+            <input type="submit" value="Показать датасет"/>
         </form></br>
     {% endfor %}
 {% endblock %}

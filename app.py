@@ -26,6 +26,7 @@ def upload():
     if request.method == 'POST':
         names = []
         files = request.files.getlist("file")
+        datasets = DataSet.query.all()
         for file in files: 
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], file.filename))
             # session['uploaded_files'] += os.path.join(app.config['UPLOAD_FOLDER'], file.filename+' ')
@@ -36,7 +37,7 @@ def upload():
                 if not db.session.query(db.session.query(DataSet).filter_by(name=name).exists()).scalar():
                     db.session.add(dataset)
                     db.session.commit()
-            return render_template('success.html', files=files)
+            return render_template('success.html', files=files, datasets=datasets)
         except (KeyboardInterrupt):
             return 'Ошибка'
     else:
@@ -51,15 +52,14 @@ def upload():
 #     #     return render_template('success.html', files=files)
     #return render_template("index.html")
  
-@app.route('/show/<string:name>')
-def show():
-    datasets = DataSet.query.all()
-
-    data_session = session.get('uploaded_files')
-    file = (os.path.join(app.config['UPLOAD_FOLDER'], db.session.query(DataSet).filter_by(id=id)))
-    filedir = pd.read_csv(file, error_bad_lines=False, engine="python", encoding='unicode_escape')
-    file_to_html = filedir.to_html()
-    return render_template('read.html', datasets=datasets)
+@app.route('/show/<int:id>')
+def show(id):
+    dataset = DataSet.query.get(id)
+    file_name = (DataSet.query.filter_by(id=dataset.id).first().name)
+    file = (os.path.join(app.config['UPLOAD_FOLDER'], file_name))
+    file_pd = pd.read_csv(file, error_bad_lines=False, engine="python", encoding='unicode_escape')
+    file_to_html = file_pd.to_html()
+    return render_template('read.html', file_to_html=file_to_html)
 
 if __name__ == '__main__':
     app.run(debug=True)
