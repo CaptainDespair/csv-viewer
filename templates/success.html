@@ -1,22 +1,22 @@
-<!DOCTYPE html>
-<html> 
-<head> 
-    <title>upload_successfully</title> 
-</head> 
-<body> 
+{% extends 'base.html' %}
+
+{% block title %}
+    successfuly
+{% endblock %}
+
+{% block body %}
     <h2>Загрузка датасета</h2>
     <p>Выберите файл для загрузки</p>
     <form method = "POST" enctype="multipart/form-data" action = "/">   
-        <input type="file" name="file" accept=".csv" multiple>
-        <input type = "submit" value="Загрузить"> 
+        <input type="file" name="file" multiple>
+        <input type ="submit" value="Загрузить"> 
     </form>
     <p style="color:rgba(0, 156, 39, 0.716)">Успешно загружено</p>
-    {% for file in files %}
-        <br>{{ file.filename }} {{ ids }}
-        <form method = "GET" action="/show">
-            <input type="submit" value="Показать датасет"/>
+    {% for file in files %}     
+        <br>{{ file.filename }} 
+        <form method = "GET" action="show/{{ datasets.id }}">
+            <input type="submit" value="Показать датасет" id = "id"/>
         </form></br>
     {% endfor %}
-</body> 
-</html>
+{% endblock %}
 
