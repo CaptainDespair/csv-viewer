@@ -1,14 +1,22 @@
 {% extends 'base.html' %}
 
 {% block title %}
-    upload
+    index
 {% endblock %}
 
 {% block body %}
-    <h2>Загрузка датасета</h2>
-    <p>Выберите файл для загрузки</p>
-    <form method = "POST" enctype="multipart/form-data" action = "/">   
-        <input type="file" name="file" id="id" multiple>
-        <input type ="submit" value="Загрузить"> 
+    <h2>Датасеты в БД</h2>
+    {% for dataset in datasets %} 
+        <br>    
+        <a href="upload/{{ dataset.id }}">/{{ dataset.name }}</a>  
+    {% endfor %}
+    <br>
+    <br>
+    <form action="/upload">
+        <button>Загрузить данные в БД</button>
+    </form>
+     <br>
+    <form method="POST" action="/">
+        <input type="submit" value="Удалить данные из БД"/>
     </form>
 {% endblock %}

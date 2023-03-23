@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block title %}
-    upload_successfuly
+    upload
 {% endblock %}
 
 {% block body %}
@@ -15,10 +15,5 @@
     <form action="/">
         <button>Показать все датасеты</button>
     </form>
-    <p style="color:rgba(0, 156, 39, 0.716)">Успешно загружено</p>
-    {% for dataset in datasets %}     
-        <a href="upload/{{ dataset.id }}">/{{ dataset.name }}</a>
-        <br>
-    {% endfor %}
+ 
 {% endblock %}
-
