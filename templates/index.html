@@ -7,7 +7,7 @@
 {% block body %}
     <h2>Датасеты в БД</h2>
     {% for dataset in datasets %} 
-        <h4><a href="upload/{{ dataset.id }}">{{ dataset.name }}</a></h4>
+    <h3><a href="upload/{{ dataset.id }}">{{ dataset.name }}</a></h3>
         <i>COLUMN_INFO: //{{ dataset.info }}//</i>
     {% endfor %}
     <form action="/upload">

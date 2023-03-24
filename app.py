@@ -9,7 +9,7 @@ UPLOAD_FOLDER = os.path.join('csv_files')
 ALLOWED_EXTENSIONS = {'csv'}
 
 #--Конфиги, подключение к SQLite
-app = Flask(__name__)
+app = Flask(__name__, static_url_path='/static')
 app.secret_key = 'secret123'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['SQLALCHEMY_DATABASE_URI']='sqlite:///datasets.db'
@@ -76,9 +76,9 @@ def show(id):
         file = (os.path.join(app.config['UPLOAD_FOLDER'], file_name))
         file_pd = pd.read_csv(file, error_bad_lines=False, engine="python", encoding='unicode_escape')
         #--Выводим csv на html-страницу
-        file_to_html = file_pd.to_html(table_id = "my_id")
-        return render_template('read.html', file_to_html=file_to_html)
-    except FileNotFoundError:
+        file_to_html = file_pd.to_html(table_id = "dataset_id")
+        return render_template('read.html', file_to_html=file_to_html, file_name=file_name)
+    except:
         return render_template('error.html')
 
 

@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 
 <html>
-    <head> 
+    <head>{% block head %}
         <title>{% block title %}{% endblock %}</title> 
+        {% endblock %}
     </head> 
     <body>
         {% block body %}{% endblock %}
