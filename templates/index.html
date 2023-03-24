@@ -8,7 +8,8 @@
     <h2>Датасеты в БД</h2>
     {% for dataset in datasets %} 
         <br>    
-        <a href="upload/{{ dataset.id }}">/{{ dataset.name }}</a>  
+        <a href="upload/{{ dataset.id }}">/{{ dataset.name }}</a> 
+        {{ inf }}
     {% endfor %}
     <br>
     <br>

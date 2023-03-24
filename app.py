@@ -22,12 +22,12 @@ class DataSet(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
 
-
 #--Отображение/удаление датасетов из БД 
 @app.route('/', methods=['GET', 'POST'])
 def delete():
     try:
         datasets = DataSet.query.all()
+     
         if request.method == 'POST':
             db.session.query(DataSet).delete()
             db.session.commit()
@@ -45,7 +45,7 @@ def upload():
         if request.method == 'POST':
             names = []
             files = request.files.getlist("file")
-            for file in files: 
+            for file in files:
                 file.save(os.path.join(app.config['UPLOAD_FOLDER'], file.filename))
                 names.append(file.filename)
             for name in names:
@@ -68,6 +68,7 @@ def show(id):
     file = (os.path.join(app.config['UPLOAD_FOLDER'], file_name))
     file_pd = pd.read_csv(file, error_bad_lines=False, engine="python", encoding='unicode_escape')
     file_to_html = file_pd.to_html()
+
     return render_template('read.html', file_to_html=file_to_html)
 
 
