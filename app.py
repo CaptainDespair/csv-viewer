@@ -62,7 +62,7 @@ def upload():
                     db.session.commit()
             datasets = DataSet.query.all()
             return render_template('success.html', datasets=datasets)
-    except(KeyboardInterrupt):
+    except:
         return render_template('upload.html', datasets=datasets)    
     else:   
         return render_template('upload.html', datasets=datasets)
@@ -70,13 +70,16 @@ def upload():
 #--Отображение csv в виде таблиц на html
 @app.route('/upload/<int:id>')
 def show(id):
-    dataset = DataSet.query.get(id)
-    file_name = (DataSet.query.filter_by(id=dataset.id).first().name)
-    file = (os.path.join(app.config['UPLOAD_FOLDER'], file_name))
-    file_pd = pd.read_csv(file, error_bad_lines=False, engine="python", encoding='unicode_escape')
-    #--Выводим csv на html-страницу
-    file_to_html = file_pd.to_html()
-    return render_template('read.html', file_to_html=file_to_html)
+    try:
+        dataset = DataSet.query.get(id)
+        file_name = (DataSet.query.filter_by(id=dataset.id).first().name)
+        file = (os.path.join(app.config['UPLOAD_FOLDER'], file_name))
+        file_pd = pd.read_csv(file, error_bad_lines=False, engine="python", encoding='unicode_escape')
+        #--Выводим csv на html-страницу
+        file_to_html = file_pd.to_html(table_id = "my_id")
+        return render_template('read.html', file_to_html=file_to_html)
+    except FileNotFoundError:
+        return render_template('error.html')
 
 
 if __name__ == '__main__':
