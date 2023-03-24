@@ -21,13 +21,14 @@ db = SQLAlchemy(app)
 class DataSet(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
+    info = db.Column(db.Text(1000), nullable=False)
+
 
 #--Отображение/удаление датасетов из БД 
 @app.route('/', methods=['GET', 'POST'])
 def delete():
     try:
         datasets = DataSet.query.all()
-     
         if request.method == 'POST':
             db.session.query(DataSet).delete()
             db.session.commit()
@@ -37,7 +38,7 @@ def delete():
     else:   
         return render_template('index.html', datasets=datasets)
     
-#--Загрузка датасетов в БД
+#--Загрузка датасетов и информации о колонках в БД
 @app.route('/upload', methods=['GET', 'POST'])
 def upload():
     try:
@@ -45,17 +46,23 @@ def upload():
         if request.method == 'POST':
             names = []
             files = request.files.getlist("file")
+            #--Загрузка файлов на сервер
             for file in files:
                 file.save(os.path.join(app.config['UPLOAD_FOLDER'], file.filename))
                 names.append(file.filename)
+            #--Добавление имен и информации о колонках в БД
             for name in names:
-                dataset = DataSet(name=name)
+                file = (os.path.join(app.config['UPLOAD_FOLDER'], name))
+                file_pd = pd.read_csv(file, error_bad_lines=False, engine="python", encoding='unicode_escape')
+                info = str((file_pd.dtypes))
+                dataset = DataSet(name=name, info=info)
+                #--Проверяем на наличие идентичных датасетов в БД
                 if not db.session.query(db.session.query(DataSet).filter_by(name=name).exists()).scalar():
-                    db.session.add(dataset)
+                    db.session.add(dataset)                 
                     db.session.commit()
             datasets = DataSet.query.all()
             return render_template('success.html', datasets=datasets)
-    except:
+    except(KeyboardInterrupt):
         return render_template('upload.html', datasets=datasets)    
     else:   
         return render_template('upload.html', datasets=datasets)
@@ -67,8 +74,8 @@ def show(id):
     file_name = (DataSet.query.filter_by(id=dataset.id).first().name)
     file = (os.path.join(app.config['UPLOAD_FOLDER'], file_name))
     file_pd = pd.read_csv(file, error_bad_lines=False, engine="python", encoding='unicode_escape')
+    #--Выводим csv на html-страницу
     file_to_html = file_pd.to_html()
-
     return render_template('read.html', file_to_html=file_to_html)
 
 
