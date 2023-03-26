@@ -7,16 +7,20 @@
 {% block body %}
     <h2>Загрузка датасета</h2>
     <p>Выберите файл для загрузки</p>
+
     <form method = "POST" enctype="multipart/form-data" action = "/upload">   
         <input type="file" name="file" multiple>
         <input type ="submit" value="Загрузить"> 
     </form>
+
     <br>
     <form action="/">
         <button>К управленю БД</button>
     </form>
+
     <p style="color:rgba(0, 156, 39, 0.716)">Успешно загружено</p>
     <h3>Все файлы: </h3>
+    
     {% for dataset in datasets %}     
         <a href="upload/{{ dataset.id }}">/{{ dataset.name }}</a>
         <br>

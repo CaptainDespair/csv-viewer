@@ -1,18 +1,27 @@
 {% extends 'base.html' %}
 {% block head %}
-<link rel="stylesheet" href="/static/css/data_style.css">
-<script src="/static/js/sort_script.js"></script>
+  <link rel="stylesheet" href="/static/css/data_style.css">
+  <script src="/static/js/sort_script.js"></script>
+  <script src="/static/js/filter_script.js"></script>
 {% endblock %}
 
 {% block body %}
     <center><h3>{{file_name}}</h3></center>
-    <p>*Кликнув на названия столбцов, выполняется сортировка ↑↓</p>
+
     <form action="/">
       <button>К управленю БД</button>
     </form>
+
+    <p>*Кликнув на названия столбцов, выполняется сортировка ↑↓</p>
+
+    <input 
+      type="text" 
+      id="myInput" 
+      onkeyup="myFunction()" 
+      placeholder="Search for an element..." 
+    >
     
     <br>
     {{ info }}
     {{ file_to_html |safe }}
-
 {% endblock %}

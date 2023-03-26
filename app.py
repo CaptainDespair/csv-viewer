@@ -14,7 +14,7 @@ app.secret_key = 'secret123'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['SQLALCHEMY_DATABASE_URI']='sqlite:///datasets.db'
 
-#--Определяем ОРМ как SQLAlchemy 
+#--ОРМ SQLAlchemy 
 db = SQLAlchemy(app)
 
 #--Создаем "модель" для хранения имён csv-файлов
@@ -28,15 +28,20 @@ class DataSet(db.Model):
 @app.route('/', methods=['GET', 'POST'])
 def delete():
     try:
+        datasets_exist = []
         datasets = DataSet.query.all()
+        files = os.listdir(UPLOAD_FOLDER)
+        for dataset in datasets:
+            if dataset.name in files:
+                datasets_exist.append(dataset)
         if request.method == 'POST':
             db.session.query(DataSet).delete()
             db.session.commit()
             return render_template('index.html')
     except:
-        return render_template('index.html', datasets=datasets)    
+        return render_template('index.html', datasets=datasets_exist)    
     else:   
-        return render_template('index.html', datasets=datasets)
+        return render_template('index.html', datasets=datasets_exist)
     
 #--Загрузка датасетов и информации о колонках в БД
 @app.route('/upload', methods=['GET', 'POST'])
@@ -67,7 +72,7 @@ def upload():
     else:   
         return render_template('upload.html', datasets=datasets)
 
-#--Отображение csv в виде таблиц на html
+#--Отображение csv в виде html-таблиц
 @app.route('/upload/<int:id>')
 def show(id):
     try:
@@ -78,6 +83,22 @@ def show(id):
         #--Выводим csv на html-страницу
         file_to_html = file_pd.to_html(table_id = "dataset_id")
         return render_template('read.html', file_to_html=file_to_html, file_name=file_name)
+    except:
+        return render_template('error.html')
+
+#--Удаление файлов из папки csv_files    
+@app.route('/index/remove', methods=['GET', 'POST'])
+def remove():
+    try:
+        files = os.listdir(UPLOAD_FOLDER)
+        if request.method == 'POST' and files != []:
+            for file in files:
+                os.remove(os.path.join(app.config['UPLOAD_FOLDER'], file))
+            return render_template('error.html')
+        elif files != []:
+            return render_template('remove.html', files=files)
+        else: 
+            return render_template('error.html')
     except:
         return render_template('error.html')
 

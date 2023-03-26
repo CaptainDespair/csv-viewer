@@ -6,15 +6,24 @@
 
 {% block body %}
     <h2>Датасеты в БД</h2>
+
     {% for dataset in datasets %} 
     <h3><a href="upload/{{ dataset.id }}">{{ dataset.name }}</a></h3>
-        <i>COLUMN_INFO: //{{ dataset.info }}//</i>
+        <p>COLUMN_INFO: //{{ dataset.info }}//</p>
     {% endfor %}
+
     <form action="/upload">
+        <br>
         <button>Загрузить данные в БД</button>
     </form>
-     <br>
+
+    <br>
     <form method="POST" action="/">
         <input type="submit" value="Удалить данные из БД"/>
+    </form>
+    
+    <br>
+    <form action="/index/remove">
+        <button>Удалить файлы из папки</button>
     </form>
 {% endblock %}

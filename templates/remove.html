@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    remove_files
+{% endblock %}
+
+{% block body %}
+    <h2>Файлы в папке csv_files:</h2>
+    <h2 style="color: red">Вы уверены, что хотите удалить все файлы из папки?</h3>
+        
+    <ol>
+    {% for file in files %} 
+        <li>{{ file }}</li>
+        <br>
+    {% endfor %}
+    </ol>
+
+    <form method="POST" action="/index/remove">
+        <input type="submit" value="Удалить все файлы"/>
+    </form>
+
+    <br>
+    
+    <form action="/">
+        <button>К управленю БД</button>
+      </form>
+ 
+{% endblock %}

@@ -19,4 +19,3 @@ const getSort = ({ target }) => {
 document.querySelectorAll('.dataframe thead').forEach(tableTH => tableTH.addEventListener('click', () => getSort(event)));
 
 });
-
