@@ -21,4 +21,5 @@
  
  При наличии docker'а на вашей ОС:
  >docker image build -t test-task1 .
+ 
  >docker run -p 5000:5000 -it test-task1
