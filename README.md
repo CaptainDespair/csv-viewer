@@ -29,6 +29,6 @@
  >python ./app.py
  
  При наличии docker'а на вашей ОС:
- >docker image build -t test-task1 .
+ >docker image build -t <think up image_name> .
  
- >docker run -p 5000:5000 -it test-task1
+ >docker run -p 5000:5000 -it <think up image_name>
